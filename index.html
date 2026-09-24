@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Heart Disease Prediction</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+  }
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .pulse-ring {
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.7; }
+    70% { transform: scale(1); opacity: 0.3; }
+    100% { transform: scale(0.95); opacity: 0.7; }
+  }
+</style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-cyan-50">
+  <!-- Animated background elements -->
+  <div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <div class="absolute -top-40 -right-40 w-80 h-80 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+    <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+    <div class="absolute top-1/2 left-1/4 w-80 h-80 bg-cyan-300 rounded-full mix-blend-multiply filter blur-3xl opacity-30"></div>
+  </div>
+
+  <div class="max-w-6xl mx-auto p-4 md:p-6 relative z-10">
+    <!-- Header -->
+    <div class="text-center mb-10 pt-6">
+      <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-rose-500 to-red-500 shadow-lg mb-4">
+        <i class="fas fa-heartbeat text-white text-3xl"></i>
+      </div>
+      <h1 class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-2">
+        Heart Disease Prediction
+      </h1>
+      <p class="text-gray-600 max-w-2xl mx-auto">
+        Assess your heart disease risk based on health metrics. Fill in the form below for a personalized analysis.
+      </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="glass-card rounded-3xl shadow-2xl p-6 md:p-8 mb-10">
+      <div class="flex items-center mb-8">
+        <div class="w-3 h-10 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full mr-3"></div>
+        <h2 class="text-2xl font-bold text-gray-800">
+          <i class="fas fa-user-circle text-purple-500 mr-2"></i> 
+          Personal Health Information
+        </h2>
+      </div>
+
+      <form class="space-y-8">
+        <!-- Height / Weight / BMI Section -->
+        <div class="bg-gradient-to-r from-cyan-50 to-blue-50 p-6 rounded-2xl border border-cyan-100">
+          <h3 class="text-lg font-semibold text-cyan-800 mb-4 flex items-center">
+            <i class="fas fa-weight-scale mr-2"></i> Body Measurements
+          </h3>
+          <div class="grid md:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Height (cm)</label>
+              <div class="relative">
+                <input id="height" type="number" 
+                  class="w-full p-3 pl-10 border-2 border-cyan-200 rounded-xl focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200 focus:outline-none transition-all bg-white">
+                <i class="fas fa-ruler-vertical absolute left-3 top-3.5 text-cyan-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Weight (kg)</label>
+              <div class="relative">
+                <input id="weight" type="number" 
+                  class="w-full p-3 pl-10 border-2 border-cyan-200 rounded-xl focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200 focus:outline-none transition-all bg-white">
+                <i class="fas fa-weight-hanging absolute left-3 top-3.5 text-cyan-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">BMI</label>
+              <div class="relative">
+                <input id="bmi" readonly 
+                  class="w-full p-3 pl-10 border-2 border-cyan-200 rounded-xl bg-gradient-to-r from-cyan-50 to-white text-cyan-700 font-semibold">
+                <i class="fas fa-calculator absolute left-3 top-3.5 text-cyan-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">BMI Category</label>
+              <div class="relative">
+                <input id="bmiCategory" readonly 
+                  class="w-full p-3 pl-10 border-2 border-cyan-200 rounded-xl bg-gradient-to-r from-cyan-50 to-white text-cyan-700 font-semibold">
+                <i class="fas fa-chart-line absolute left-3 top-3.5 text-cyan-500"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lifestyle Section -->
+        <div class="bg-gradient-to-r from-orange-50 to-amber-50 p-6 rounded-2xl border border-orange-100">
+          <h3 class="text-lg font-semibold text-orange-800 mb-4 flex items-center">
+            <i class="fas fa-wine-bottle mr-2"></i> Lifestyle Factors
+          </h3>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Smoking</label>
+              <div class="relative">
+                <select id="Smoking" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-orange-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-200 bg-white">
+                  <option>No</option><option>Yes</option>
+                </select>
+                <i class="fas fa-smoking absolute left-3 top-3.5 text-orange-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Alcohol Drinking</label>
+              <div class="relative">
+                <select id="AlcoholDrinking" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-orange-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-200 bg-white">
+                  <option>No</option><option>Yes</option>
+                </select>
+                <i class="fas fa-wine-glass-alt absolute left-3 top-3.5 text-orange-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Physical Activity</label>
+              <div class="relative">
+                <select id="PhysicalActivity" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-orange-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-200 bg-white">
+                  <option>Yes</option><option>No</option>
+                </select>
+                <i class="fas fa-running absolute left-3 top-3.5 text-orange-500"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Health History Section -->
+        <div class="bg-gradient-to-r from-rose-50 to-pink-50 p-6 rounded-2xl border border-rose-100">
+          <h3 class="text-lg font-semibold text-rose-800 mb-4 flex items-center">
+            <i class="fas fa-file-medical mr-2"></i> Health History
+          </h3>
+          <div class="grid md:grid-cols-3 gap-6 mb-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Stroke History</label>
+              <div class="relative">
+                <select id="Stroke" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-rose-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-200 bg-white">
+                  <option>No</option><option>Yes</option>
+                </select>
+                <i class="fas fa-brain absolute left-3 top-3.5 text-rose-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Diabetic</label>
+              <div class="relative">
+                <select id="Diabetic" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-rose-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-200 bg-white">
+                  <option>No</option><option>Yes</option><option>Borderline</option>
+                </select>
+                <i class="fas fa-syringe absolute left-3 top-3.5 text-rose-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Difficulty Walking</label>
+              <div class="relative">
+                <select id="DiffWalking" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-rose-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-200 bg-white">
+                  <option>No</option><option>Yes</option>
+                </select>
+                <i class="fas fa-walking absolute left-3 top-3.5 text-rose-500"></i>
+              </div>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Asthma</label>
+              <div class="relative">
+                <select id="Asthma" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-rose-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-200 bg-white">
+                  <option>No</option><option>Yes</option>
+                </select>
+                <i class="fas fa-lungs absolute left-3 top-3.5 text-rose-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Kidney Disease</label>
+              <div class="relative">
+                <select id="KidneyDisease" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-rose-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-200 bg-white">
+                  <option>No</option><option>Yes</option>
+                </select>
+                <i class="fas fa-kidneys absolute left-3 top-3.5 text-rose-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Skin Cancer</label>
+              <div class="relative">
+                <select id="SkinCancer" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-rose-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-200 bg-white">
+                  <option>No</option><option>Yes</option>
+                </select>
+                <i class="fas fa-allergies absolute left-3 top-3.5 text-rose-500"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Demographics Section -->
+        <div class="bg-gradient-to-r from-violet-50 to-purple-50 p-6 rounded-2xl border border-violet-100">
+          <h3 class="text-lg font-semibold text-violet-800 mb-4 flex items-center">
+            <i class="fas fa-users mr-2"></i> Demographics
+          </h3>
+          <div class="grid md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Sex</label>
+              <div class="relative">
+                <select id="Sex" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-violet-200 rounded-xl focus:border-violet-400 focus:ring-2 focus:ring-violet-200 bg-white">
+                  <option>Female</option><option>Male</option>
+                </select>
+                <i class="fas fa-user absolute left-3 top-3.5 text-violet-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Age Category</label>
+              <div class="relative">
+                <select id="AgeCategory" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-violet-200 rounded-xl focus:border-violet-400 focus:ring-2 focus:ring-violet-200 bg-white">
+                  <option>55-59</option><option>60-64</option><option>65-69</option>
+                  <option>70-74</option><option>75-79</option><option>80 or older</option>
+                </select>
+                <i class="fas fa-birthday-cake absolute left-3 top-3.5 text-violet-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Race</label>
+              <div class="relative">
+                <select id="Race" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-violet-200 rounded-xl focus:border-violet-400 focus:ring-2 focus:ring-violet-200 bg-white">
+                  <option>White</option>
+                  <option>Black</option>
+                  <option>Asian</option>
+                  <option>American Indian/Alaskan Native</option>
+                  <option>Hispanic</option>
+                  <option>Other</option>
+                </select>
+                <i class="fas fa-globe-americas absolute left-3 top-3.5 text-violet-500"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Health Metrics Section -->
+        <div class="bg-gradient-to-r from-emerald-50 to-green-50 p-6 rounded-2xl border border-emerald-100">
+          <h3 class="text-lg font-semibold text-emerald-800 mb-4 flex items-center">
+            <i class="fas fa-heartbeat mr-2"></i> Health Metrics
+          </h3>
+          <div class="grid md:grid-cols-4 gap-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">General Health</label>
+              <div class="relative">
+                <select id="GenHealth" 
+                  class="w-full p-3 pl-10 appearance-none border-2 border-emerald-200 rounded-xl focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 bg-white">
+                  <option>Excellent</option><option>Very good</option><option>Good</option>
+                  <option>Fair</option><option>Poor</option>
+                </select>
+                <i class="fas fa-heart absolute left-3 top-3.5 text-emerald-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Physical Health (days)</label>
+              <div class="relative">
+                <input id="PhysicalHealth" type="number" 
+                  class="w-full p-3 pl-10 border-2 border-emerald-200 rounded-xl focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 bg-white">
+                <i class="fas fa-dumbbell absolute left-3 top-3.5 text-emerald-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Mental Health (days)</label>
+              <div class="relative">
+                <input id="MentalHealth" type="number" 
+                  class="w-full p-3 pl-10 border-2 border-emerald-200 rounded-xl focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 bg-white">
+                <i class="fas fa-brain absolute left-3 top-3.5 text-emerald-500"></i>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Sleep Time (hrs)</label>
+              <div class="relative">
+                <input id="SleepTime" type="number" 
+                  class="w-full p-3 pl-10 border-2 border-emerald-200 rounded-xl focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200 bg-white">
+                <i class="fas fa-bed absolute left-3 top-3.5 text-emerald-500"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Predict Button -->
+        <button type="button" id="predictBtn"
+         class="w-full bg-gradient-to-r from-purple-600 via-pink-500 to-rose-500 
+                text-white py-4 rounded-2xl font-bold text-xl
+                hover:shadow-2xl hover:scale-[1.02] hover:shadow-purple-300
+                active:scale-95 transition-all duration-300
+                flex items-center justify-center group">
+          <i class="fas fa-stethoscope mr-3 group-hover:animate-pulse"></i>
+          Predict Heart Disease Risk
+          <i class="fas fa-arrow-right ml-3 group-hover:translate-x-2 transition-transform"></i>
+        </button>
+      </form>
+    </div>
+
+    <!-- Results Card -->
+    <div class="glass-card rounded-3xl shadow-2xl p-6 md:p-8 mb-10">
+      <div class="flex items-center mb-8">
+        <div class="w-3 h-10 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-full mr-3"></div>
+        <h2 class="text-2xl font-bold text-gray-800">
+          <i class="fas fa-chart-bar text-cyan-500 mr-2"></i> 
+          Prediction Results
+        </h2>
+      </div>
+
+      <!-- Prediction Result -->
+      <div class="mb-8">
+        <h3 class="text-lg font-semibold text-gray-700 mb-4">Prediction</h3>
+        <div id="predictionBox" 
+          class="p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 
+                 flex items-center justify-center min-h-[120px]">
+          <div class="text-center">
+            <i class="fas fa-heart text-4xl text-blue-400 mb-2"></i>
+            <p class="text-xl font-bold text-blue-600">Waiting for analysis...</p>
+            <p class="text-gray-500 mt-2">Fill the form and click predict to get results</p>
+          </div>
+        </div>
+        <p class="text-xs text-gray-500 mt-4 flex items-center">
+          <i class="fas fa-exclamation-triangle text-amber-500 mr-2"></i>
+          ⚠️ This result is based on statistical patterns, not a medical diagnosis. Always consult a healthcare professional.
+        </p>
+      </div>
+
+  
+    </div>
+
+    <!-- Footer Note -->
+    <div class="text-center text-gray-500 text-sm pb-6">
+      <p>This tool is for informational purposes only. Always seek advice from qualified healthcare providers.</p>
+    </div>
+  </div>
+
+  <!-- JavaScript with formatted health advice -->
+  <script>
+ // JavaScript with enhanced formatting for health advice
+const heightEl = document.getElementById("height");
+const weightEl = document.getElementById("weight");
+const bmiEl = document.getElementById("bmi");
+const bmiCatEl = document.getElementById("bmiCategory");
+const predictBtn = document.getElementById("predictBtn");
+const predictionBox = document.getElementById("predictionBox");
+const gptAdvice = document.getElementById("gptAdvice");
+
+// Function to format advice text with numbered lists
+const formatAdvice = (adviceText) => {
+  // Clean up the text - remove duplicate "Based on the provided information" line
+  let cleanText = adviceText.trim();
+  
+  // Check if the first line is duplicated
+  const firstLineMatch = cleanText.match(/^(.*?)\n/);
+  if (firstLineMatch) {
+    const firstLine = firstLineMatch[1];
+    // Check if this line appears again in the text
+    const lines = cleanText.split('\n');
+    if (lines.length > 1 && lines[1].includes(firstLine)) {
+      // Remove the duplicate line (keep only one instance)
+      cleanText = lines.filter((line, index) => index !== 1).join('\n');
+    }
+  }
+  
+  // Try to extract numbered list
+  const numberedItems = cleanText.match(/\d+\.\s+[^\d]+?(?=\s*\d+\.|\s*$)/gs);
+  
+  if (numberedItems && numberedItems.length > 0) {
+    // Extract the title (text before the first number)
+    const titleMatch = cleanText.match(/^([^\d]+?)(?=\s*\d+\.)/s);
+    let title = titleMatch ? titleMatch[1].trim() : "Health Recommendations:";
+    
+    // Clean up the title - remove any trailing colons or extra text
+    title = title.replace(/^Based on the provided information,\s*/i, '')
+                 .replace(/^here\'s some health advice:\s*/i, '')
+                 .replace(/:\s*$/, '')
+                 .trim();
+    
+    if (!title) title = "Personalized Health Advice";
+    
+    // Create the formatted list with proper styling
+    return `
+      <div>
+        <div class="flex items-center mb-4">
+          <i class="fas fa-comment-medical text-emerald-500 text-xl mr-2"></i>
+          <h4 class="font-bold text-emerald-800 text-lg">${title}</h4>
+        </div>
+        <div class="space-y-3">
+          ${numberedItems.map((item, index) => {
+            // Clean the item text
+            let itemText = item.replace(/^\d+\.\s*/, '').trim();
+            
+            // Capitalize first letter if needed
+            itemText = itemText.charAt(0).toUpperCase() + itemText.slice(1);
+            
+            return `
+              <div class="flex items-start group hover:bg-emerald-50 p-2 rounded-lg transition-colors">
+                <div class="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center mr-3 mt-0.5 shadow-sm">
+                  <span class="text-white font-bold text-sm">${index + 1}</span>
+                </div>
+                <div class="flex-1">
+                  <p class="text-emerald-900">${itemText}</p>
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  } else {
+    // If no numbered list found, show as regular text with line breaks
+    const formattedText = cleanText
+      .split('\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0)
+      .map(line => `<p class="mb-2 text-emerald-900">${line}</p>`)
+      .join('');
+    
+    return `
+      <div>
+        <div class="flex items-center mb-3">
+          <i class="fas fa-comment-medical text-emerald-500 text-xl mr-2"></i>
+          <h4 class="font-bold text-emerald-800">Personalized Health Advice</h4>
+        </div>
+        <div class="text-emerald-900">
+          ${formattedText}
+        </div>
+      </div>
+    `;
+  }
+};
+
+function calcBMI() {
+  const h = parseFloat(heightEl.value);
+  const w = parseFloat(weightEl.value);
+  if (!h || !w) return false;
+
+  const bmi = (w / Math.pow(h / 100, 2)).toFixed(1);
+  bmiEl.value = bmi;
+  
+  // Color code BMI categories
+  let bmiClass = "";
+  if (bmi < 18.5) {
+    bmiCatEl.value = "Underweight";
+    bmiClass = "text-blue-600";
+  } else if (bmi < 25) {
+    bmiCatEl.value = "Normal";
+    bmiClass = "text-green-600";
+  } else if (bmi < 30) {
+    bmiCatEl.value = "Overweight";
+    bmiClass = "text-amber-600";
+  } else {
+    bmiCatEl.value = "Obese";
+    bmiClass = "text-red-600";
+  }
+  
+  bmiCatEl.className = `w-full p-3 pl-10 border-2 border-cyan-200 rounded-xl bg-gradient-to-r from-cyan-50 to-white font-semibold ${bmiClass}`;
+  
+  return true;
+}
+
+heightEl.addEventListener("input", calcBMI);
+weightEl.addEventListener("input", calcBMI);
+
+predictBtn.onclick = async () => {
+  if (!calcBMI()) {
+    // Animated alert
+    predictionBox.innerHTML = `
+      <div class="text-center animate-pulse">
+        <i class="fas fa-exclamation-circle text-4xl text-amber-500 mb-2"></i>
+        <p class="text-xl font-bold text-amber-600">Please enter height and weight</p>
+        <p class="text-gray-600 mt-2">Both fields are required for prediction</p>
+      </div>
+    `;
+    predictionBox.className = "p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-200 flex items-center justify-center min-h-[120px]";
+    return;
+  }
+
+  // Update UI for loading state
+  predictionBox.innerHTML = `
+    <div class="text-center">
+      <div class="inline-block relative">
+        <i class="fas fa-heartbeat text-4xl text-blue-500 mb-2"></i>
+        <div class="absolute inset-0 w-full h-full bg-blue-400 rounded-full pulse-ring"></div>
+      </div>
+      <p class="text-xl font-bold text-blue-600 mt-4">Analyzing health data…</p>
+      <p class="text-gray-600 mt-2">This may take a few moments</p>
+    </div>
+  `;
+  predictionBox.className = "p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 flex items-center justify-center min-h-[120px]";
+  
+  gptAdvice.innerHTML = `
+    <div class="text-center">
+      <i class="fas fa-spinner fa-spin text-4xl text-emerald-400 mb-2"></i>
+      <p class="text-emerald-700">Generating personalized health advice…</p>
+    </div>
+  `;
+
+  predictBtn.disabled = true;
+  predictBtn.innerHTML = `
+    <i class="fas fa-spinner fa-spin mr-3"></i>
+    Analyzing...
+  `;
+  predictBtn.classList.add("opacity-70", "cursor-not-allowed");
+
+  const payload = {
+    BMI: parseFloat(bmiEl.value),
+    Smoking: Smoking.value,
+    AlcoholDrinking: AlcoholDrinking.value,
+    Stroke: Stroke.value,
+    PhysicalHealth: Number(PhysicalHealth.value || 0),
+    MentalHealth: Number(MentalHealth.value || 0),
+    DiffWalking: DiffWalking.value,
+    Sex: Sex.value,
+    AgeCategory: AgeCategory.value,
+    Race: Race.value,
+    Diabetic: Diabetic.value,
+    PhysicalActivity: PhysicalActivity.value,
+    GenHealth: GenHealth.value,
+    SleepTime: Number(SleepTime.value || 0),
+    Asthma: Asthma.value,
+    KidneyDisease: KidneyDisease.value,
+    SkinCancer: SkinCancer.value
+  };
+
+  try {
+    const res = await fetch("http://127.0.0.1:5000/predict", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    // Update prediction box with result
+    if (data.prediction && data.prediction.includes("Has")) {
+      predictionBox.innerHTML = `
+        <div class="text-center">
+          <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-2"></i>
+          <p class="text-2xl font-bold text-red-700">${data.prediction}</p>
+          <p class="text-gray-600 mt-2">Higher risk detected. Please consult a healthcare professional.</p>
+        </div>
+      `;
+      predictionBox.className = "p-6 rounded-2xl bg-gradient-to-r from-red-50 to-rose-50 border-2 border-red-200 flex items-center justify-center min-h-[120px]";
+    } else if (data.prediction) {
+      predictionBox.innerHTML = `
+        <div class="text-center">
+          <i class="fas fa-check-circle text-4xl text-green-500 mb-2"></i>
+          <p class="text-2xl font-bold text-green-700">${data.prediction}</p>
+          <p class="text-gray-600 mt-2">Continue maintaining healthy habits!</p>
+        </div>
+      `;
+      predictionBox.className = "p-6 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 flex items-center justify-center min-h-[120px]";
+    } else {
+      // Handle case where prediction might not be in expected format
+      predictionBox.innerHTML = `
+        <div class="text-center">
+          <i class="fas fa-info-circle text-4xl text-blue-500 mb-2"></i>
+          <p class="text-2xl font-bold text-blue-700">Analysis Complete</p>
+          <p class="text-gray-600 mt-2">${data.prediction || 'Prediction result received'}</p>
+        </div>
+      `;
+      predictionBox.className = "p-6 rounded-2xl bg-gradient-to-r from-blue-50 to-cyan-50 border-2 border-blue-200 flex items-center justify-center min-h-[120px]";
+    }
+
+    // Update health advice with formatted list
+    if (data.advice) {
+      gptAdvice.innerHTML = formatAdvice(data.advice);
+    } else {
+      gptAdvice.innerHTML = `
+        <div class="text-center">
+          <i class="fas fa-info-circle text-4xl text-amber-400 mb-2"></i>
+          <p class="text-amber-700">No specific health advice available at this time.</p>
+        </div>
+      `;
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    // Error handling
+    predictionBox.innerHTML = `
+      <div class="text-center">
+        <i class="fas fa-exclamation-circle text-4xl text-amber-500 mb-2"></i>
+        <p class="text-xl font-bold text-amber-600">Server Not Reachable</p>
+        <p class="text-gray-600 mt-2">Please ensure the Flask server is running</p>
+        <p class="text-xs text-gray-500 mt-2">Error: ${error.message}</p>
+      </div>
+    `;
+    predictionBox.className = "p-6 rounded-2xl bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-200 flex items-center justify-center min-h-[120px]";
+    
+    gptAdvice.innerHTML = `
+      <div class="text-center">
+        <i class="fas fa-times-circle text-4xl text-rose-400 mb-2"></i>
+        <p class="text-rose-700">Cannot generate advice without server connection</p>
+      </div>
+    `;
+  } finally {
+    predictBtn.disabled = false;
+    predictBtn.innerHTML = `
+      <i class="fas fa-stethoscope mr-3"></i>
+      Predict Heart Disease Risk
+      <i class="fas fa-arrow-right ml-3"></i>
+    `;
+    predictBtn.classList.remove("opacity-70", "cursor-not-allowed");
+  }
+};
+
+  </script>
+
+</body>
+</html>
